@@ -31,19 +31,20 @@
 						<tr>
 							<td>{key}</td>
 							<td class="value">{value}</td>
-							<td
-								><form {...updateForm} class="update-form" aria-label="Update {key}">
-									<input {...updateForm.fields.key.as('hidden')} value={key} />
-									<label for="value-{key}" class="sr-only">New value for {key}</label>
-									<input
-										id="value-{key}"
-										{...updateForm.fields.value.as('text')}
-										{value}
-										placeholder="New value"
-									/>
-									<button type="submit" class="secondary">Save</button>
-								</form></td
-							>
+							<td>
+								<form {...updateForm} class="update-form" aria-label="Update {key}">
+									<fieldset role="group">
+										<input {...updateForm.fields.key.as('hidden')} value={key} />
+										<input
+											id="value-{key}"
+											{...updateForm.fields.value.as('text')}
+											{value}
+											placeholder="New value"
+										/>
+										<button type="submit" class="secondary" style="margin: 0;">Save</button>
+									</fieldset>
+								</form>
+							</td>
 							<td>
 								<form {...deleteForm} class="inline-form" aria-label="Delete {key}">
 									<input {...deleteForm.fields.key.as('hidden')} value={key} />
