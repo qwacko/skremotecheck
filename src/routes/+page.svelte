@@ -8,8 +8,6 @@
 
 	const keys = $derived(getAllKeysFunction());
 	const awaitedKeys = $derived((await keys).keys);
-
-	$inspect(awaitedKeys);
 </script>
 
 <main class="container">
@@ -33,7 +31,7 @@
 							<td class="value">{value}</td>
 							<td>
 								<form {...updateForm} class="update-form" aria-label="Update {key}">
-									<fieldset role="group">
+									<fieldset>
 										<input {...updateForm.fields.key.as('hidden')} value={key} />
 										<input
 											id="value-{key}"
@@ -99,25 +97,11 @@
 	.grid {
 		align-items: stretch;
 	}
-	article.card {
-		display: flex;
-		flex-direction: column;
-	}
-	article.card .value {
-		flex-grow: 1;
-	}
-	footer.actions {
-		display: flex;
-		gap: 0.75rem;
-		align-items: flex-start;
-		flex-wrap: wrap;
-	}
+
 	form.inline-form {
 		margin: 0;
 	}
-	.update-details summary {
-		cursor: pointer;
-	}
+
 	.update-form {
 		display: flex;
 		gap: 0.5rem;
