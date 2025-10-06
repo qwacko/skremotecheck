@@ -8,36 +8,141 @@
 
 	const keys = $derived(getAllKeysFunction());
 	const awaitedKeys = $derived((await keys).keys);
+
+	$inspect(awaitedKeys);
 </script>
 
-<h1>Remote Functions Test</h1>
-<h2>All Items</h2>
-<ul>
-	{#each awaitedKeys as key}
-		{@const updateForm = updateKeyFunction.for('updatekey' + key)}
-		{@const deleteForm = deleteKeyFunction.for('deletekey' + key)}
-		{@const value = (await getValueFunction({ key })).value}
-		<li>
-			<strong>{key}</strong>: {value}
-			<form {...deleteForm} style="display:inline">
-				<input {...deleteForm.fields.key.as('hidden')} value={key} />
-				<button type="submit">Delete</button>
-			</form>
-			<form {...updateForm}>
-				<input {...updateForm.fields.key.as('hidden')} value={key} />
-				<label for="value-{key}">New Value:</label>
-				<input {...updateForm.fields.value.as('text')} {value} placeholder="New Value" />
-				<button type="submit">Update</button>
-			</form>
-		</li>
-	{/each}
-</ul>
+<main class="container">
+	<header class="page-header">
+		<h1>Remote Key/Value Store</h1>
+		<p class="lede">Demo of remote functions: list, update and delete key/value pairs.</p>
+	</header>
 
-<h2>Add Item</h2>
-<form {...updateKeyFunction}>
-	<label for="key">Key:</label>
-	<input id="key" {...updateKeyFunction.fields.key.as('text')} />
-	<label for="value">Value:</label>
-	<input id="value" {...updateKeyFunction.fields.value.as('text')} />
-	<button type="submit">Add/Update Item</button>
-</form>
+	<section aria-labelledby="items-heading" class="items-section">
+		<h2 id="items-heading">All Items</h2>
+		{#if awaitedKeys?.length}
+			<table>
+				<thead><tr><th>Key</th><th>Value</th><th>Value</th><th>Actions</th></tr></thead>
+				<tbody>
+					{#each awaitedKeys as key}
+						{@const value = (await getValueFunction({ key })).value}
+						{@const updateForm = updateKeyFunction.for('updatekey' + key)}
+						{@const deleteForm = deleteKeyFunction.for('deletekey' + key)}
+						<tr>
+							<td>{key}</td>
+							<td class="value">{value}</td>
+							<td
+								><form {...updateForm} class="update-form" aria-label="Update {key}">
+									<input {...updateForm.fields.key.as('hidden')} value={key} />
+									<label for="value-{key}" class="sr-only">New value for {key}</label>
+									<input
+										id="value-{key}"
+										{...updateForm.fields.value.as('text')}
+										{value}
+										placeholder="New value"
+									/>
+									<button type="submit" class="secondary">Save</button>
+								</form></td
+							>
+							<td>
+								<form {...deleteForm} class="inline-form" aria-label="Delete {key}">
+									<input {...deleteForm.fields.key.as('hidden')} value={key} />
+									<button type="submit" class="contrast outline" aria-label="Delete {key}"
+										>Delete</button
+									>
+								</form>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{:else}
+			<p><em>No items yet.</em></p>
+		{/if}
+	</section>
+
+	<section aria-labelledby="add-heading" class="add-section">
+		<h2 id="add-heading">Add or Update Item</h2>
+		<form {...updateKeyFunction} class="add-form">
+			<fieldset>
+				<legend>Item data</legend>
+				<div class="grid">
+					<label>
+						<span>Key</span>
+						<input
+							{...updateKeyFunction.fields.key.as('text')}
+							placeholder="e.g. username"
+							required
+						/>
+					</label>
+					<label>
+						<span>Value</span>
+						<input {...updateKeyFunction.fields.value.as('text')} placeholder="Value" required />
+					</label>
+				</div>
+			</fieldset>
+			<button type="submit">Save Item</button>
+		</form>
+	</section>
+</main>
+
+<style>
+	/* Pico is already loaded globally; add light custom tweaks scoped to this page */
+	main.container {
+		margin-top: 2rem;
+	}
+	.page-header .lede {
+		margin-top: -0.5rem;
+		color: var(--muted-color);
+	}
+	.grid {
+		align-items: stretch;
+	}
+	article.card {
+		display: flex;
+		flex-direction: column;
+	}
+	article.card .value {
+		flex-grow: 1;
+	}
+	footer.actions {
+		display: flex;
+		gap: 0.75rem;
+		align-items: flex-start;
+		flex-wrap: wrap;
+	}
+	form.inline-form {
+		margin: 0;
+	}
+	.update-details summary {
+		cursor: pointer;
+	}
+	.update-form {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-top: 0.5rem;
+	}
+	.update-form input[type='text'] {
+		flex: 1 1 12ch;
+	}
+	.add-form fieldset {
+		margin-bottom: 1rem;
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
+	}
+	@media (prefers-color-scheme: dark) {
+		.page-header .lede {
+			color: var(--muted-color);
+		}
+	}
+</style>
