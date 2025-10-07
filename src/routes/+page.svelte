@@ -7,8 +7,8 @@
 		deleteKeyFunction
 	} from './test.remote';
 
-	const keys = $derived(getAllKeysFunction());
-	const awaitedKeys = $derived((await keys).keys);
+	const keys = $derived(await getAllKeysFunction());
+	const awaitedKeys = $derived(keys.keys);
 </script>
 
 <main class="container">

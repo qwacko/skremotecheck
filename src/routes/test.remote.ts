@@ -27,3 +27,8 @@ export const getAllKeysFunction = query(async () => {
 	const keys = Array.from(kvStore.keys());
 	return { keys };
 });
+
+export const getAllKeysDataFunction = query(async () => {
+	const data = Array.from(kvStore.keys()).map((item) => ({ key: item, value: kvStore.get(item) }));
+	return { data };
+});
