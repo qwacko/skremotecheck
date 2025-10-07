@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import {
 		getAllKeysFunction,
 		getValueFunction,
@@ -12,17 +13,24 @@
 
 <main class="container">
 	<header class="page-header">
-		<h1>Remote Key/Value Store</h1>
-		<p class="lede">Demo of remote functions: list, update and delete key/value pairs.</p>
+		<h1 style="display: inline;">Remote Key/Value Store</h1>
+		<button
+			class="contrast"
+			onclick={() => invalidateAll()}
+			style="display: inline; margin-left: 1rem;"
+		>
+			Refresh
+		</button>
 	</header>
 
 	<section aria-labelledby="items-heading" class="items-section">
 		<h2 id="items-heading">All Items</h2>
+		<h3>There are {awaitedKeys ? awaitedKeys.length : 0} Values</h3>
 		{#if awaitedKeys?.length}
 			<table>
 				<thead><tr><th>Key</th><th>Value</th><th>Value</th><th>Actions</th></tr></thead>
 				<tbody>
-					{#each awaitedKeys as key}
+					{#each awaitedKeys as key (key)}
 						{@const value = (await getValueFunction({ key })).value}
 						{@const updateForm = updateKeyFunction.for('updatekey' + key)}
 						{@const deleteForm = deleteKeyFunction.for('deletekey' + key)}
@@ -31,7 +39,8 @@
 							<td class="value">{value}</td>
 							<td>
 								<form {...updateForm} class="update-form" aria-label="Update {key}">
-									<fieldset>
+									<!-- svelte-ignore a11y_no_redundant_roles -->
+									<fieldset role="group">
 										<input {...updateForm.fields.key.as('hidden')} value={key} />
 										<input
 											id="value-{key}"
