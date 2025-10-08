@@ -9,7 +9,7 @@
 
 	const keys = $derived(await getAllKeysFunction());
 	const awaitedKeys = $derived(keys.keys);
-	$inspect('Awaited Keys', awaitedKeys);
+	// $inspect('Awaited Keys', awaitedKeys);
 </script>
 
 <main class="container">
