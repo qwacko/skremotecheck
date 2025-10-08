@@ -9,6 +9,7 @@
 
 	const keys = $derived(await getAllKeysFunction());
 	const awaitedKeys = $derived(keys.keys);
+	$inspect('Awaited Keys', awaitedKeys);
 </script>
 
 <main class="container">
@@ -41,7 +42,7 @@
 								<form {...updateForm} class="update-form" aria-label="Update {key}">
 									<!-- svelte-ignore a11y_no_redundant_roles -->
 									<fieldset role="group">
-										<input {...updateForm.fields.key.as('hidden')} value={key} />
+										<input {...updateForm.fields.key.as('hidden', key)} />
 										<input
 											id="value-{key}"
 											{...updateForm.fields.value.as('text')}
@@ -54,7 +55,7 @@
 							</td>
 							<td>
 								<form {...deleteForm} class="inline-form" aria-label="Delete {key}">
-									<input {...deleteForm.fields.key.as('hidden')} value={key} />
+									<input {...deleteForm.fields.key.as('hidden', key)} />
 									<button type="submit" class="contrast outline" aria-label="Delete {key}"
 										>Delete</button
 									>
